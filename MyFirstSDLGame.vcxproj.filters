@@ -16,6 +16,15 @@
     <Filter Include="소스 파일\Core">
       <UniqueIdentifier>{4c6477bd-9aa6-4026-a511-ab717b165bf3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{29907d7d-6782-417f-9278-1f06ab92dcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gfx">
+      <UniqueIdentifier>{c63a0484-bc90-4983-bfba-81a00589cb1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\util">
+      <UniqueIdentifier>{a32f6cef-3a64-45a3-a946-f38d874ae467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,5 +33,43 @@
     <ClCompile Include="Core\Application.cpp">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Time.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="gfx\Renderer.cpp">
+      <Filter>소스 파일\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Log.cpp">
+      <Filter>소스 파일\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\Application.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Time.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="gfx\Renderer.h">
+      <Filter>소스 파일\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Log.h">
+      <Filter>소스 파일\util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

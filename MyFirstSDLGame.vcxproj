@@ -140,7 +140,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Application.cpp" />
+    <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
+    <ClCompile Include="gfx\Renderer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Scene\Scene.h" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="util\Log.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\Application.h" />
+    <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Core\Time.h" />
+    <ClInclude Include="gfx\Renderer.h" />
+    <ClInclude Include="util\Log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
