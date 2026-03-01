@@ -83,5 +83,8 @@
     <ClInclude Include="Scene\GameScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="gfx\DrawCommand.h">
+      <Filter>소스 파일\gfx</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

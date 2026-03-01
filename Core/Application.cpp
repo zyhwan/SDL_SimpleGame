@@ -79,6 +79,8 @@ void Application::CommitSceneChangeIfNeeded()
 void Application::Run() { //게임 루프
     CommitSceneChangeIfNeeded();
 
+    DrawQueue q; // 매 프레임 재사용(스택에 두고 Clear로 비움)
+
     while (m_running) { //루프가 한번 돌때가 (1 Frame)
         m_Input.BeginFrame();
         PumpEvents();
@@ -89,10 +91,11 @@ void Application::Run() { //게임 루프
 
         // ---- Render ----
         if (m_renderer) {
-            auto& r = m_renderer2D;
-            r.BackGroundColor({ 0,0,0,255 }); // 배경 지우기(검정)
-            if (m_scene) m_scene->Render(*this, r);
-            r.EndFrame();
+            m_renderer2D.BackGroundColor({ 0,0,0,255 }); // 배경 지우기(검정)
+            if (m_scene) m_scene->Render(*this, q);
+
+            m_renderer2D.Flush(q); //드로우 큐에 쌓인 렌더러 한번에 표현.
+            m_renderer2D.EndFrame(); //present를 통해 윈도우에 출력.
         }
 
         // 프레임 끝에서 씬 교체 커밋

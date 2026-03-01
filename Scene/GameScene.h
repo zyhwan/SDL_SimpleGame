@@ -8,7 +8,7 @@ public:
 
     void HandleEvent(Application& app, const SDL_Event& e) override;
     void Update(Application& app, float dt) override;
-    void Render(Application& app, Renderer& renderer) override;
+    void Render(Application& app, DrawQueue& q) override;
 
 private:
     // 테스트용: 이동하는 사각형 위치/속도

@@ -48,12 +48,9 @@ void GameScene::Update(Application& app, float dt)
 	m_y += dy * m_speed * dt;
 }
 
-void GameScene::Render(Application& app, Renderer& renderer)
+void GameScene::Render(Application& app, DrawQueue& q)
 {
-	(void)app;
-
 	SDL_FRect r{ m_x, m_y, 80.0f, 80.0f };
 
-	//renderer.DrawRect(r, { 0,200,255,255 });
-    renderer.DrawFillRect(r, { 0,200,255,255 });
+    q.AddRectFilled(r, { 0,200,255,255 }, 5); //드로우 큐에 렌더를 쌓아두기
 }

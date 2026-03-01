@@ -1,6 +1,6 @@
 ﻿#include "TitleScene.h"
-#include "../core/Application.h"
 #include "GameScene.h"
+#include "../core/Application.h"
 #include "../gfx/Renderer.h"
 
 TitleScene::TitleScene()
@@ -33,12 +33,12 @@ void TitleScene::Update(Application& app, float dt) {
     }
 }
 
-void TitleScene::Render(Application& app, Renderer& renderer) {
-    int w, h;
-    //app에서 윈도우 
-    SDL_GetWindowSize(app.GetWindow(), &w, &h);
-    // 화면 중앙에 흰 사각형 하나(TitleScene이 떴다 확인용)
-    SDL_FRect r{ (w - 300.0f) * 0.5f, (h - 120.0f) * 0.5f, 300.0f, 120.0f };
+void TitleScene::Render(Application& app, DrawQueue& q) {
+	int w, h;
+	//app에서 윈도우 
+	SDL_GetWindowSize(app.GetWindow(), &w, &h);
+	// 화면 중앙에 흰 사각형 하나(TitleScene이 떴다 확인용)
+	SDL_FRect r{ (w - 300.0f) * 0.5f, (h - 120.0f) * 0.5f, 300.0f, 120.0f };
 
-    renderer.DrawRect(r, { 255, 255, 255, 255 });
+	q.AddRectFilled(r, { 255,255,255,255 }, 10); //드로우 큐에 렌더를 쌓아두기
 }

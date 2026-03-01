@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <SDL3/SDL.h>
 #include <vector>
 #include <cstdint>
@@ -7,30 +7,30 @@ struct Color {
     Uint8 r = 0, g = 0, b = 0, a = 255;
 };
 
-enum class DrawType : uint8_t {
+enum class DrawType {
     RectOutline,
     RectFilled,
     Texture
 };
 
-// »ç°¢Çü/ÅØ½ºÃ³ ¸ğµÎ ÅëÀÏÇØ¼­ z Á¤·Ä °¡´ÉÇÏ°Ô "ÇÑ Ä¿¸Çµå"·Î ¹­À½
+// ì‚¬ê°í˜•/í…ìŠ¤ì²˜ ëª¨ë‘ í†µì¼í•´ì„œ z ì •ë ¬ ê°€ëŠ¥í•˜ê²Œ "í•œ ì»¤ë§¨ë“œ"ë¡œ ë¬¶ìŒ
 struct DrawCommand {
     DrawType type = DrawType::RectOutline;
-    int      z = 0;               // ³·À»¼ö·Ï ¸ÕÀú ±×·ÁÁü(=µÚ ·¹ÀÌ¾î)
+    int      z = 0;               // ê¹Šì´ê°€ ë‚®ì„ìˆ˜ë¡ ë¨¼ì € ê·¸ë ¤ì§(=ë’¤ ë ˆì´ì–´)
     Color    color{ 255,255,255,255 };
 
-    // Rect ¸í·É
+    // Rect ëª…ë ¹
     SDL_FRect rect{ 0,0,0,0 };
 
-    // Texture ¸í·É
+    // Texture ëª…ë ¹
     SDL_Texture* texture = nullptr;
-    SDL_FRect    dst{ 0,0,0,0 };
-    SDL_FRect    src{ 0,0,0,0 };
+    SDL_FRect    dst{ 0,0,0,0 }; //ê·¸ë¦¬ëŠ” ìœ„ì¹˜ì™€ ì–´ëŠì •ë„ í¬ê¸°ë¡œ ê·¸ë¦´ì§€ ì—¬ë¶€
+    SDL_FRect    src{ 0,0,0,0 }; //í…ìŠ¤ì²˜ ì´ë¯¸ì§€ ì¤‘ì—ì„œ ì–´ë–¤ ë¶€ë¶„ë§Œ ì˜ë¼ì„œ ê·¸ë¦´ì§€ ì§€ì •í•˜ëŠ” ë²”ìœ„(ìŠ¤í”„ë¼ì´íŠ¸ ì´ë¯¸ì§€ì—ì„œëŠ” í•„ìˆ˜ì )
     bool         useSrc = false;
 
-    // (¼±ÅÃ) È¸Àü/ÇÃ¸³ µî È®Àå Æ÷ÀÎÆ®
+    //íšŒì „/í”Œë¦½ ë“± í™•ì¥
     float rotation = 0.0f;
-    SDL_FPoint origin{ 0.0f, 0.0f };
+    SDL_FPoint origin{ 0.0f, 0.0f }; //ì‚¬ê°í˜•ì—ì„œ ì–´ë””ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ íšŒì „ì‹œí‚¬ì§€.
     SDL_FlipMode flip = SDL_FLIP_NONE;
 };
 
@@ -80,5 +80,5 @@ public:
     std::vector<DrawCommand>& Commands() { return m_cmds; }
 
 private:
-    std::vector<DrawCommand> m_cmds;
+    std::vector<DrawCommand> m_cmds; //í•œ í™”ë©´ì— ìŒ“ì´ëŠ” ë Œë”ë“¤ ë ˆì´ì–´ë¥¼ í˜•ì„±í•¨.
 };
