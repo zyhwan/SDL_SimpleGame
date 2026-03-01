@@ -1,4 +1,9 @@
 ﻿#include "Application.h"
+#include "../Scene/Scene.h"
+// MyFirstSDLGame/
+// core / Application.cpp
+// scene / Scene.h
+// 경로가 이런 경우일 경우 앞에 ../을 작성해줘야함.
 
 Application::Application() = default;
 
@@ -10,9 +15,9 @@ Application::~Application()
 
 bool Application::Init()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO) == false)
 	{
-		SDL_Log("SDL_Init failed: %s", SDL_GetError);
+		SDL_Log("SDL_Init failed: %s", SDL_GetError());
 		return false;
 	}
 	// 1024*768 크기의 윈도우 창 생성
@@ -36,7 +41,7 @@ bool Application::Init()
 }
 
 void Application::SetScene(std::unique_ptr<Scene> next) {
-    if (m_scene) m_scene->OnExit();
+    if (m_scene) m_scene->OnExit(*this);
     m_scene = std::move(next);
     if (m_scene) m_scene->OnEnter(*this);
 }
@@ -75,8 +80,11 @@ void Application::Run() {
 }
 
 void Application::Shutdown() {
+    if (m_shutdownDone) return;
+    m_shutdownDone = true;
+
     if (m_scene) {
-        m_scene->OnExit();
+        m_scene->OnExit(*this);
         m_scene.reset();
     }
 

@@ -2,7 +2,7 @@
 #include<memory>
 #include<SDL3/SDL.h>
 
-struct Scene; //전방 선언
+class Scene; //전방 선언
 
 class Application {
 public:
@@ -19,19 +19,15 @@ public:
 	SDL_Window* GetWindow() const { return m_window; }
 	SDL_Renderer* GetRenderer() const { return m_renderer; }
 
-	void Quit() { m_running = false; }
+	void quit() { m_running = false; }
 private:
 	void PumpEvents();
 private:
-	//동작 여부
-	bool m_running = false;
+	bool m_shutdownDone = false; //shutdown여부
+	bool m_running = false; //동작 여부
 
-	//윈도우 객체
-	SDL_Window* m_window = nullptr;
-	//렌더러
-	SDL_Renderer* m_renderer = nullptr;
+	SDL_Window* m_window = nullptr; //윈도우 객체
+	SDL_Renderer* m_renderer = nullptr; //렌더러
 
-	//현재 씬의 정보
-	std::unique_ptr<Scene> m_scene;
-
+	std::unique_ptr<Scene> m_scene; //현재 씬의 정보
 };

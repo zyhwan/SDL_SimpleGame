@@ -143,17 +143,20 @@
     <ClCompile Include="Core\Input.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="gfx\Renderer.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\Scene.h" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="util\Log.cpp" />
+    <ClCompile Include="util\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Application.h" />
     <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="gfx\Renderer.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="util\Log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
