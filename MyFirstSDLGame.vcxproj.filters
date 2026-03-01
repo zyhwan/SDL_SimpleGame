@@ -60,6 +60,12 @@
     <ClCompile Include="util\stdafx.h">
       <Filter>소스 파일\util</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Texture.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ResourceManager.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Application.h">
@@ -85,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="gfx\DrawCommand.h">
       <Filter>소스 파일\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Texture.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ResourceManager.h">
+      <Filter>소스 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

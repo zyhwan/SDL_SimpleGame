@@ -4,6 +4,7 @@
 #include"Time.h"
 #include"Input.h"
 #include"../gfx/Renderer.h"
+#include"ResourceManager.h"
 
 class Scene; //전방 선언
 
@@ -27,6 +28,8 @@ public:
 	//렌더링 관리
 	Renderer& GetRenderer2D() { return m_renderer2D; } // 새 API
 
+	//리소스 관리자
+	ResourceManager& Resource() { return *m_resource; }
 	void quit() { m_running = false; }
 private:
 	void PumpEvents();
@@ -45,7 +48,7 @@ private:
 	Time m_Time;
 	Input m_Input;
 
-
 	std::unique_ptr<Scene> m_scene;        // 현재 씬
 	std::unique_ptr<Scene> m_pendingScene; // 다음 씬(예약)
+	std::unique_ptr<ResourceManager> m_resource; //리소스 관리자.
 };

@@ -11,6 +11,16 @@ GameScene::~GameScene()
 {
 }
 
+void GameScene::OnEnter(Application& app)
+{
+    m_Tex = app.Resource().LoadTexture("Resource/bmp_Sample.bmp");
+}
+
+void GameScene::OnExit(Application& app)
+{
+    m_Tex.reset();
+}
+
 void GameScene::HandleEvent(Application& app, const SDL_Event& e)
 {
 	(void)app; (void)e;
@@ -52,5 +62,9 @@ void GameScene::Render(Application& app, DrawQueue& q)
 {
 	SDL_FRect r{ m_x, m_y, 80.0f, 80.0f };
 
-    q.AddRectFilled(r, { 0,200,255,255 }, 5); //드로우 큐에 렌더를 쌓아두기
+    //드로우 큐에 렌더를 쌓아두기
+    q.AddRectFilled(r, { 0,200,255,255 }, 5); //기본 사각형 생성
+
+    SDL_FRect dst{ 300, 0, 531.6, 700 };
+    q.AddTexture(m_Tex, dst, 4); //샘플 텍스쳐 생성
 }

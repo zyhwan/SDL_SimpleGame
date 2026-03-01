@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <SDL3/SDL.h>
+#include "../Core/Texture.h"
 //#include "../gfx/Renderer.h"
 
 //전방 선언

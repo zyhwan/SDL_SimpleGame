@@ -36,6 +36,7 @@ bool Application::Init()
 		return false;
 	}
 
+    m_resource = std::make_unique<ResourceManager>(m_renderer);
     m_renderer2D.SetNative(m_renderer); //Render클래스에서 SDL_Renderer객체 관리
     m_Time.Reset();
 	m_running = true;
@@ -111,6 +112,12 @@ void Application::Shutdown() {
     if (m_scene) {
         m_scene->OnExit(*this);
         m_scene.reset();
+    }
+    if (m_pendingScene) m_pendingScene.reset();
+
+    if (m_resource) {
+        m_resource->Clear();   // Clear() 구현 권장
+        m_resource.reset();
     }
 
     if (m_renderer) {
