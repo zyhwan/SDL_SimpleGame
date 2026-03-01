@@ -1,6 +1,7 @@
 ﻿#include "TitleScene.h"
 #include "../core/Application.h"
 #include "GameScene.h"
+#include "../gfx/Renderer.h"
 
 TitleScene::TitleScene()
 {
@@ -32,13 +33,12 @@ void TitleScene::Update(Application& app, float dt) {
     }
 }
 
-void TitleScene::Render(Application& app, SDL_Renderer* renderer) {
+void TitleScene::Render(Application& app, Renderer& renderer) {
     int w, h;
     //app에서 윈도우 
     SDL_GetWindowSize(app.GetWindow(), &w, &h);
     // 화면 중앙에 흰 사각형 하나(TitleScene이 떴다 확인용)
     SDL_FRect r{ (w - 300.0f) * 0.5f, (h - 120.0f) * 0.5f, 300.0f, 120.0f };
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
-    SDL_RenderFillRect(renderer, &r);
+    renderer.DrawRect(r, { 255, 255, 255, 255 });
 }

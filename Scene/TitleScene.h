@@ -13,5 +13,5 @@ public:
 
     void HandleEvent(Application& app, const SDL_Event& e) override;
     void Update(Application& app, float dt) override;
-    void Render(Application& app, SDL_Renderer* renderer) override;
+    void Render(Application& app, Renderer& renderer) override;
 };

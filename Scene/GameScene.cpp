@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "../Core/Application.h"
-
+#include "../gfx/Renderer.h"
+#include "TitleScene.h"
 
 GameScene::GameScene()
 {
@@ -25,6 +26,11 @@ void GameScene::Update(Application& app, float dt)
         return;
     }
 
+    if (app.GetInput().WasPressed(SDLK_RETURN)) {
+        app.SetScene(std::make_unique<TitleScene>());
+        return;
+    }
+
     // WASD 이동 (누르고 있는 동안)
     float dx = 0.0f, dy = 0.0f;
     if (app.GetInput().IsDown(SDLK_A)) dx -= 1.0f;
@@ -38,17 +44,16 @@ void GameScene::Update(Application& app, float dt)
         dy *= 0.7071067f;
     }
 
-    m_x += dx * m_speed * dt;
-    m_y += dy * m_speed * dt;
+	m_x += dx * m_speed * dt;
+	m_y += dy * m_speed * dt;
 }
 
-void GameScene::Render(Application& app, SDL_Renderer* renderer)
+void GameScene::Render(Application& app, Renderer& renderer)
 {
-    (void)app;
+	(void)app;
 
-    SDL_FRect r{ m_x, m_y, 80.0f, 80.0f };
+	SDL_FRect r{ m_x, m_y, 80.0f, 80.0f };
 
-    SDL_SetRenderDrawColor(renderer, 0, 200, 255, 255);
-    SDL_RenderFillRect(renderer, &r);
-
+	//renderer.DrawRect(r, { 0,200,255,255 });
+    renderer.DrawFillRect(r, { 0,200,255,255 });
 }

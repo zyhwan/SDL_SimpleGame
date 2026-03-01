@@ -36,15 +36,15 @@ bool Application::Init()
 		return false;
 	}
 
+    m_renderer2D.SetNative(m_renderer); //Render클래스에서 SDL_Renderer객체 관리
     m_Time.Reset();
 	m_running = true;
 	return true;
 }
 
 void Application::SetScene(std::unique_ptr<Scene> next) {
-    if (m_scene) m_scene->OnExit(*this);
-    m_scene = std::move(next);
-    if (m_scene) m_scene->OnEnter(*this);
+    // 즉시 OnExit/OnEnter 하지 말고, 예약만 한다.
+    m_pendingScene = std::move(next);
 }
 
 void Application::PumpEvents() {
@@ -62,8 +62,24 @@ void Application::PumpEvents() {
     }
 }
 
+void Application::CommitSceneChangeIfNeeded()
+{
+    if (!m_pendingScene) return;
+
+    if (m_scene) m_scene->OnExit(*this);
+
+    m_scene = std::move(m_pendingScene); //std::move가 실행되는 순간 자동으로 비워지면서 nullptr 상태
+
+    if (m_scene) m_scene->OnEnter(*this);
+
+    // 씬 전환 직후 dt 튐 방지
+    m_Time.Reset();
+}
+
 void Application::Run() { //게임 루프
-    while (m_running) {
+    CommitSceneChangeIfNeeded();
+
+    while (m_running) { //루프가 한번 돌때가 (1 Frame)
         m_Input.BeginFrame();
         PumpEvents();
         m_Time.Tick();
@@ -73,15 +89,14 @@ void Application::Run() { //게임 루프
 
         // ---- Render ----
         if (m_renderer) {
-            // 배경 지우기(검정)
-            SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-            SDL_RenderClear(m_renderer);
-
-            if (m_scene) m_scene->Render(*this, m_renderer);
-
-            SDL_RenderPresent(m_renderer);
+            auto& r = m_renderer2D;
+            r.BeginFrame({ 0,0,0,255 }); // 배경 지우기(검정)
+            if (m_scene) m_scene->Render(*this, r);
+            r.EndFrame();
         }
 
+        // 프레임 끝에서 씬 교체 커밋
+        CommitSceneChangeIfNeeded();
         SDL_Delay(1);
     }
 }
