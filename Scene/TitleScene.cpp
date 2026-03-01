@@ -11,13 +11,11 @@ TitleScene::~TitleScene()
 
 }
 
-void TitleScene::HandleEvent(Application& app, const SDL_Event& e) {
-    // ESC 누르면 종료
-    if (e.type == SDL_EVENT_KEY_DOWN) {
-        if (e.key.key == SDLK_ESCAPE) {
-            app.quit();
-        }
-    }
+void TitleScene::HandleEvent(Application & app, const SDL_Event & e) {
+	// ESC 누르면 종료
+	if (app.GetInput().WasPressed(SDLK_ESCAPE)) {
+		app.quit();
+	}
 }
 
 void TitleScene::Update(Application& app, float dt) {

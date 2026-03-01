@@ -36,6 +36,7 @@ bool Application::Init()
 		return false;
 	}
 
+    m_Time.Reset();
 	m_running = true;
 	return true;
 }
@@ -53,16 +54,22 @@ void Application::PumpEvents() {
             m_running = false;
             return;
         }
+
+        // Input에 이벤트 반영
+        m_Input.ProcessEvent(e);
+
         if (m_scene) m_scene->HandleEvent(*this, e);
     }
 }
 
-void Application::Run() {
+void Application::Run() { //게임 루프
     while (m_running) {
+        m_Input.BeginFrame();
         PumpEvents();
+        m_Time.Tick();
+        const float dt = m_Time.DeltaSeconds();
 
-        // ---- Update (임시 dt=1/60) ----
-        if (m_scene) m_scene->Update(*this, 1.0f / 60.0f);
+        if (m_scene) m_scene->Update(*this, dt);
 
         // ---- Render ----
         if (m_renderer) {
@@ -75,7 +82,7 @@ void Application::Run() {
             SDL_RenderPresent(m_renderer);
         }
 
-        SDL_Delay(16);
+        SDL_Delay(1);
     }
 }
 
