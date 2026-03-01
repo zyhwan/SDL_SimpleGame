@@ -80,5 +80,8 @@
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿#include "TitleScene.h"
 #include "../core/Application.h"
+#include "GameScene.h"
 
 TitleScene::TitleScene()
 {
@@ -19,7 +20,16 @@ void TitleScene::HandleEvent(Application & app, const SDL_Event & e) {
 }
 
 void TitleScene::Update(Application& app, float dt) {
-    (void)app; (void)dt;
+    if (app.GetInput().WasPressed(SDLK_ESCAPE)) {
+        app.quit();
+        return;
+    }
+
+    // Enter 누르면 GameScene으로
+    if (app.GetInput().WasPressed(SDLK_RETURN)) {
+        app.SetScene(std::make_unique<GameScene>());
+        return;
+    }
 }
 
 void TitleScene::Render(Application& app, SDL_Renderer* renderer) {

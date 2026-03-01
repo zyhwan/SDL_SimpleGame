@@ -156,6 +156,7 @@
     <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="gfx\Renderer.h" />
+    <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="util\Log.h" />
   </ItemGroup>
