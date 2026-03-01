@@ -15,7 +15,7 @@ public:
 	void SetNative(SDL_Renderer* r) { m_r = r; }
 
 	// 프레임
-	void BeginFrame(Color clear = { 0,0,0,255 }) {
+	void BackGroundColor(Color clear = { 0,0,0,255 }) {
 		SDL_SetRenderDrawColor(m_r, clear.r, clear.g, clear.b, clear.a);
 		SDL_RenderClear(m_r);
 	}

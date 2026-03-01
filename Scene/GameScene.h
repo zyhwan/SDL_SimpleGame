@@ -12,7 +12,7 @@ public:
 
 private:
     // 테스트용: 이동하는 사각형 위치/속도
-    float m_x = 100.0f;
-    float m_y = 100.0f;
+    float m_x = 472.0f;
+    float m_y = 340.0f;
     float m_speed = 250.0f; // px/s
 };

@@ -90,7 +90,7 @@ void Application::Run() { //게임 루프
         // ---- Render ----
         if (m_renderer) {
             auto& r = m_renderer2D;
-            r.BeginFrame({ 0,0,0,255 }); // 배경 지우기(검정)
+            r.BackGroundColor({ 0,0,0,255 }); // 배경 지우기(검정)
             if (m_scene) m_scene->Render(*this, r);
             r.EndFrame();
         }
