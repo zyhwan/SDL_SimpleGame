@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "GameObject.h"
+#include "Camera2D.h"
 
 class DrawQueue;
 
@@ -47,6 +48,14 @@ public:
         m_pendingDestroy.clear();
     }
 
+    //---- 카메라 world가 관리 ----
+    Camera2D& Camera() { return m_camera; }
+    const Camera2D& Camera() const { return m_camera; }
+
+    void SetCameraPosition(float x, float y) { m_camera.position = { x, y }; }
+    SDL_FPoint GetCameraPosition() const { return m_camera.position; }
+
+    Camera2D m_camera{}; //카메라 관리
 private:
     void CommitPendingAdd() {
         if (m_pendingAdd.empty()) return;

@@ -21,6 +21,9 @@ public:
 
 	SDL_Window* GetWindow() const { return m_window; }
 	SDL_Renderer* GetRenderer() const { return m_renderer; }
+	SDL_FPoint GetWindowSizeF() const;   // float로 받기 (카메라 계산에 편함)
+	SDL_Point  GetWindowSizeI() const;   // 정수 버전도 있으면 유용
+
 
 	Time& GetTime() { return m_Time; }
 	Input& GetInput() { return m_Input; }

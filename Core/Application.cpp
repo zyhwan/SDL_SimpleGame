@@ -48,6 +48,23 @@ void Application::SetScene(std::unique_ptr<Scene> next) {
     m_pendingScene = std::move(next);
 }
 
+SDL_FPoint Application::GetWindowSizeF() const
+{
+    SDL_Point s = GetWindowSizeI();
+    return SDL_FPoint{ (float)s.x, (float)s.y };
+}
+
+SDL_Point Application::GetWindowSizeI() const
+{
+    SDL_Point p{ 0, 0 };
+    if (!m_window) return p;
+
+    int w = 0, h = 0;
+    SDL_GetWindowSize(m_window, &w, &h);
+    p.x = w; p.y = h;
+    return p;
+}
+
 void Application::PumpEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {

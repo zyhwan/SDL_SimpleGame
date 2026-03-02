@@ -21,7 +21,7 @@ public:
     void SetSize(float w, float h) { m_size = { w, h }; }
     void SetOrigin(float x, float y) { m_origin = { x, y }; }
 
-    void OnRender(World&, DrawQueue& q) override {
+    void OnRender(World& world, DrawQueue& q) override {
         if (!m_tex || !m_tex->Valid()) return;
 
         const auto& t = Owner().transform;
@@ -31,6 +31,9 @@ public:
         dst.y = t.position.y;
         dst.w = m_size.x * t.scale.x;
         dst.h = m_size.y * t.scale.y;
+
+        // 카메라 적용(월드 -> 스크린)
+        dst = world.Camera().WorldToScreenRect(dst);
 
         // z는 Transform이 소유, rotation도 Transform과 동일 축 사용
         if (m_useSrc) {

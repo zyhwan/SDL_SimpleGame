@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdint>
 #include "../Core/Texture.h" // TextureHandle 사용
+#include "../World/Camera2D.h"
 
 struct Color {
     Uint8 r = 0, g = 0, b = 0, a = 255;
@@ -78,6 +79,15 @@ public:
         cmd.z = z;
         m_cmds.push_back(cmd);
     }
+
+    void AddRectOutlineWorld(const SDL_FRect& worldRect, Color c, int z, const Camera2D& cam) {
+        AddRectOutline(cam.WorldToScreenRect(worldRect), c, z);
+    }
+
+    void AddRectFilledWorld(const SDL_FRect& worldRect, Color c, int z, const Camera2D& cam) {
+        AddRectFilled(cam.WorldToScreenRect(worldRect), c, z);
+    }
+
 
     const std::vector<DrawCommand>& Commands() const { return m_cmds; }
     std::vector<DrawCommand>& Commands() { return m_cmds; }

@@ -113,5 +113,8 @@
     <ClInclude Include="World\World.h">
       <Filter>소스 파일\World</Filter>
     </ClInclude>
+    <ClInclude Include="World\Camera2D.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

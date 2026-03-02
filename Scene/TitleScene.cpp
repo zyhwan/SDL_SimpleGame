@@ -15,6 +15,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::OnEnter(Application& app)
 {
+    m_world.SetCameraPosition(0.f, 0.f);
     // 예시: 타이틀 이미지가 있다고 가정
     m_titleTex = app.Resource().LoadTexture("Resource/bmp_Sample.bmp");
 

@@ -163,6 +163,7 @@
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="util\Log.h" />
+    <ClInclude Include="World\Camera2D.h" />
     <ClInclude Include="World\Component.h" />
     <ClInclude Include="World\GameObject.h" />
     <ClInclude Include="World\SpriteRendererComponent.h" />
