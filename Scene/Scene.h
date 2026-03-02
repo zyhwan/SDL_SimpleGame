@@ -20,4 +20,6 @@ public:
     virtual void HandleEvent(Application& app, const SDL_Event& e) = 0;
     virtual void Update(Application& app, float dt) = 0;
     virtual void Render(Application& app, DrawQueue& q) = 0;
+
+    virtual void UpdateUI(Application& app, float unscaledDt) {}  // unscaled (옵션)
 };

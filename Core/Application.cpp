@@ -39,6 +39,8 @@ bool Application::Init()
     m_resource = std::make_unique<ResourceManager>(m_renderer);
     m_renderer2D.SetNative(m_renderer); //Render클래스에서 SDL_Renderer객체 관리
     m_Time.Reset();
+    m_Time.SetMaxDeltaSeconds(0.05f);
+    m_Time.SetTimeScale(1.0f);
 	m_running = true;
 	return true;
 }
@@ -104,9 +106,14 @@ void Application::Run() { //게임 루프
         m_Input.BeginFrame();
         PumpEvents();
         m_Time.Tick();
+
+        const float udt = m_Time.DeltaSecondsUnscaled();
         const float dt = m_Time.DeltaSeconds();
 
-        if (m_scene) m_scene->Update(*this, dt);
+        if (m_scene) {
+            m_scene->Update(*this, dt); 
+            m_scene->UpdateUI(*this, udt);  // UI는 멈추지 않음
+        }
 
         // ---- Render ----
         if (m_renderer) {

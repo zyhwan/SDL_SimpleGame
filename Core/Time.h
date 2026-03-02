@@ -5,33 +5,58 @@
 class Time {
 public:
     void Reset() {
-        // 기준 시점을 "지금"으로 초기화한다.
-        // 게임 시작 직후나 씬 전환 직후 dt가 이상하게 튀는 걸 방지하는 용도.
-        m_lastCounter = SDL_GetPerformanceCounter(); //SDL 라이브러리에서 제공하는 고해상도 타이머(Timer) 값을 가져오는 함수
-        m_deltaSeconds = 0.0f; // dt(DeltaSeconds)를 0으로 초기화
+        m_lastCounter = SDL_GetPerformanceCounter();
+        m_deltaRawSeconds = 0.0f;
+        m_deltaUnscaledSeconds = 0.0f;
+        m_deltaSeconds = 0.0f;
     }
 
     void Tick() {
         const Uint64 now = SDL_GetPerformanceCounter();
+        const Uint64 freq = SDL_GetPerformanceFrequency();
 
-        // 고해상도 타이머의 주파수(초당 틱 수)를 읽는다.
-        // 예: freq = 10,000,000 이면 1초에 1000만 틱.
-        const Uint64 freq = SDL_GetPerformanceFrequency(); //고해상도 타이머의 초당 빈도를 가져오는 함수
-
-        // 이번 프레임에서 지난 프레임 이후 얼마나 시간이 흘렀는지(틱 단위)
         const Uint64 diff = now - m_lastCounter;
-
-        // 다음 프레임 계산을 위해 "이전 시점"을 지금으로 갱신
         m_lastCounter = now;
 
-        m_deltaSeconds = (freq > 0) ? (static_cast<float>(diff) / static_cast<float>(freq)) : 0.0f;
+        // 1) raw dt (측정값)
+        m_deltaRawSeconds = (freq > 0)
+            ? (static_cast<float>(diff) / static_cast<float>(freq))
+            : 0.0f;
 
-        // 갑작스런 디버깅/일시정지로 dt 폭발 방지(선택)
-        if (m_deltaSeconds > 0.1f) m_deltaSeconds = 0.1f;
+        // 2) clamp 적용
+        float clamped = m_deltaRawSeconds;
+        if (clamped > m_maxDeltaSeconds) clamped = m_maxDeltaSeconds;
+        if (clamped < 0.0f) clamped = 0.0f;
+
+        // 3) unscaled dt (UI/메뉴는 이걸 사용)
+        m_deltaUnscaledSeconds = clamped;
+
+        // 4) scaled dt (게임 시뮬은 이걸 사용)
+        float scaled = clamped * m_timeScale;
+        if (scaled < 0.0f) scaled = 0.0f;
+        m_deltaSeconds = scaled;
     }
 
-    float DeltaSeconds() const { return m_deltaSeconds; }
+    // --- dt getters ---
+    float DeltaSeconds() const { return m_deltaSeconds; }              // 스케일 적용 후(게임 시뮬)
+    float DeltaSecondsUnscaled() const { return m_deltaUnscaledSeconds; } // 스케일 적용 전(UI/메뉴)
+    float DeltaSecondsRaw() const { return m_deltaRawSeconds; }        // 클램프 전(디버그)
+
+    // --- dt clamp ---
+    void SetMaxDeltaSeconds(float v) { m_maxDeltaSeconds = (v > 0.0f) ? v : 0.0f; }
+    float GetMaxDeltaSeconds() const { return m_maxDeltaSeconds; }
+
+    // --- time scale ---
+    void SetTimeScale(float s) { m_timeScale = (s >= 0.0f) ? s : 0.0f; }
+    float GetTimeScale() const { return m_timeScale; }
+
 private:
     Uint64 m_lastCounter = 0;
-    float  m_deltaSeconds = 0.0f;
+
+    float  m_deltaRawSeconds = 0.0f;       // 측정값(클램프 전)
+    float  m_deltaUnscaledSeconds = 0.0f;  // 클램프 후, 스케일 전
+    float  m_deltaSeconds = 0.0f;          // 클램프 후, 스케일 후
+
+    float  m_maxDeltaSeconds = 0.05f;      // 기본 50ms clamp
+    float  m_timeScale = 1.0f;             // 1=정상, 0=정지
 };

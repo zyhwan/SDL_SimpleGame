@@ -59,7 +59,6 @@ void GameScene::HandleEvent(Application& app, const SDL_Event& e)
 
 void GameScene::Update(Application& app, float dt)
 {
-
     // WASD 이동 (누르고 있는 동안)
     if (m_player)
     {
@@ -69,6 +68,11 @@ void GameScene::Update(Application& app, float dt)
         if (app.GetInput().IsDown(SDLK_D) || app.GetInput().IsDown(SDLK_RIGHT)) p.x += m_speed * dt;
         if (app.GetInput().IsDown(SDLK_S) || app.GetInput().IsDown(SDLK_DOWN)) p.y += m_speed * dt;
         if (app.GetInput().IsDown(SDLK_W) || app.GetInput().IsDown(SDLK_UP)) p.y -= m_speed * dt;
+
+        // 카메라 follow (dt=0이면 위치 변화 없음)
+        SDL_FPoint win = app.GetWindowSizeF();
+        SDL_FPoint pp = m_player->transform.position;
+        m_world.SetCameraPosition(pp.x - win.x * 0.5f, pp.y - win.y * 0.5f);
     }
 
     //스페이스를 "이번 프레임에 눌렀을 때만" 처리
@@ -76,26 +80,50 @@ void GameScene::Update(Application& app, float dt)
         // 점프/발사/상호작용 등 1회 트리거
     }
 
-    if (m_player) //카메라가 플레이어를 따라가는 로직.
-    {
-        SDL_FPoint win = app.GetWindowSizeF();
-        SDL_FPoint p = m_player->transform.position;
-
-        m_world.SetCameraPosition(
-            p.x - win.x * 0.5f,
-            p.y - win.y * 0.5f
-        );
-    }
-
     //즉, World.Update는 단순 로직 업데이트가 아니라 오브젝트 등록 / 삭제 커밋까지 포함하는 "월드 틱"임.
     m_world.Update(dt);
 
 }
 
+
+void GameScene::UpdateUI(Application& app, float unscaledDt)
+{
+    // Pause 토글(입력은 unscaled로 처리해도 무방)
+    if (app.GetInput().WasPressed(SDLK_F2)) {
+        app.GetTime().SetTimeScale(0.0f); // pause
+    }
+    if (app.GetInput().WasPressed(SDLK_F3)) {
+        app.GetTime().SetTimeScale(1.0f); // resume
+    }
+    if (app.GetInput().WasPressed(SDLK_F1)) {
+        app.GetTime().SetTimeScale(0.2f); // slow-mo 테스트
+    }
+
+    // UI 깜빡임(udt 기반): timeScale=0이어도 계속 변화해야 정상
+    m_uiBlink += unscaledDt;
+    if (m_uiBlink >= 0.5f) {          // 0.5초마다 토글
+        m_uiBlink = 0.f;
+        m_showPauseText = !m_showPauseText;
+    }
+}
+
+
 void GameScene::Render(Application& app, DrawQueue& q)
 {
     // 월드는 DrawQueue에 커맨드만 적재
     m_world.Render(q);
+
+    // 화면 고정 UI(스크린 좌표): 카메라 적용하면 안 됨
+    // 간단히 화면 상단에 UI 바처럼 그린다
+    q.AddRectFilled({ 0.f, 0.f, 300.f, 40.f }, { 20,20,20,200 }, 100000);
+
+    // timeScale == 0일 때만 'PAUSE' 표시(깜빡임 확인)
+    if (app.GetTime().GetTimeScale() == 0.0f && m_showPauseText) {
+        // "PAUSED" 대신 표시용 큰 사각형
+        q.AddRectFilled({ 20.f, 60.f, 240.f, 80.f }, { 255,255,255,255 }, 100000);
+        q.AddRectOutline({ 20.f, 60.f, 240.f, 80.f }, { 0,0,0,255 }, 100001);
+    }
+
 
     // 배경(월드 좌표): 예를 들어 (0,0)~(2000,1200)짜리 월드
     SDL_FRect worldBg = { 0.f, 0.f, 2000.f, 1200.f };
