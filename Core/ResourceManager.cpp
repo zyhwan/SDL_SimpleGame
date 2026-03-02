@@ -1,4 +1,20 @@
 #include "ResourceManager.h"
+#include <algorithm>
+
+
+static bool EndsWithIgnoreCase(const std::string& s, const std::string& suffix)
+{
+    if (s.size() < suffix.size()) return false;
+    auto it1 = s.end() - suffix.size();
+    auto it2 = suffix.begin();
+    for (; it1 != s.end(); ++it1, ++it2) {
+        char a = *it1, b = *it2;
+        if ('A' <= a && a <= 'Z') a = char(a - 'A' + 'a');
+        if ('A' <= b && b <= 'Z') b = char(b - 'A' + 'a');
+        if (a != b) return false;
+    }
+    return true;
+}
 
 TextureHandle ResourceManager::LoadTexture(const std::string& path)
 {
@@ -18,36 +34,45 @@ TextureHandle ResourceManager::LoadTexture(const std::string& path)
 
     if (!m_renderer) return nullptr;
 
-    // 3) 디스크에서 이미지 로드
-    //    (BMP로 시작하면 SDL_LoadBMP가 가장 단순)
-    SDL_Surface* surf = SDL_LoadBMP(path.c_str());
-    if (!surf) {
-        SDL_Log("SDL_LoadBMP failed (%s): %s", path.c_str(), SDL_GetError());
-        return nullptr;
+    SDL_Texture* raw = nullptr;
+
+    // 3) SDL3_image로 먼저 시도 (PNG/JPG/BMP 등 다 가능)
+    // IMG_LoadTexture는 파일 확장자 기반으로 포맷을 처리하고 GPU 텍스처까지 만든다. :contentReference[oaicite:2]{index=2}
+    raw = IMG_LoadTexture(m_renderer, path.c_str());
+    if (!raw) 
+    {
+        // 4) 실패하면 BMP 전용 fallback (SDL 기본 로더)
+        // SDL_image가 빌드/배포 환경에서 빠져있거나, 지원 코덱이 없을 때 대비
+        if (EndsWithIgnoreCase(path, ".bmp")) 
+        {
+            SDL_Surface* surf = SDL_LoadBMP(path.c_str());
+            if (!surf) {
+                SDL_Log("SDL_LoadBMP failed (%s): %s", path.c_str(), SDL_GetError());
+                return nullptr;
+            }
+
+            raw = SDL_CreateTextureFromSurface(m_renderer, surf);
+            SDL_DestroySurface(surf);
+
+            if (!raw) {
+                SDL_Log("SDL_CreateTextureFromSurface failed (%s): %s", path.c_str(), SDL_GetError());
+                return nullptr;
+            }
+        }
+        else 
+        {
+            return nullptr;
+        }
     }
 
-    // 4) Surface -> Texture 변환(여기서 GPU 텍스처 생성)
-    SDL_Texture* raw = SDL_CreateTextureFromSurface(m_renderer, surf);
-    SDL_DestroySurface(surf); // 5) Surface는 CPU 메모리라서 변환 후 해제
-
-    if (!raw) {
-        SDL_Log("CreateTextureFromSurface failed (%s): %s", path.c_str(), SDL_GetError());
-        return nullptr;
-    }
-
-    // 6) raw(SDL_Texture*)를 Texture RAII로 감싼다.
-    //    - 여기서부터는 Texture가 소멸 시 DestroyTexture를 책임짐
+    // 4) RAII 래핑 + 캐시 등록
     auto tex = std::make_shared<Texture>(raw);
-
-    // 7) 캐시에 저장(weak_ptr)
-    //    - 캐시는 tex의 생명주기를 "붙잡지 않음"
-    //    - 사용처가 shared_ptr 들고 있을 때만 살아있음
-    m_texCache[path] = tex; // weak_ptr로 저장
-    // 8) 사용처(Scene 등)에게 shared_ptr 반환
+    m_texCache[path] = tex;
     return tex;
 }
 
 void ResourceManager::Clear()
 {
-
+    // weak_ptr 캐시 자체를 비움 (실제 텍스처 생명주기는 shared_ptr이 쥐고 있음)
+    m_texCache.clear();
 }

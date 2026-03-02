@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <memory>
 #include "Texture.h"
+#include <SDL3_image/SDL_image.h>
 
 // ResourceManager는 텍스처를 "로드 + 캐시"하는 관리자.
 //
