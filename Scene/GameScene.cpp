@@ -30,8 +30,7 @@ void GameScene::OnEnter(Application& app)
     sprite.SetSize(64.f, 64.f);
 
     // (선택) 원점/회전 쓰면
-    sprite.SetOrigin(32.f, 32.f);
-
+    //sprite.SetOrigin(32.f, 32.f);
 }
 
 void GameScene::OnExit(Application& app)
