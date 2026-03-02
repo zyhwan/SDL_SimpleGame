@@ -145,7 +145,6 @@
     <ClCompile Include="Core\Texture.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="gfx\Renderer.cpp" />
-    <ClCompile Include="main2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Scene\Scene.h" />
@@ -164,6 +163,11 @@
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="util\Log.h" />
+    <ClInclude Include="World\Component.h" />
+    <ClInclude Include="World\GameObject.h" />
+    <ClInclude Include="World\SpriteRendererComponent.h" />
+    <ClInclude Include="World\Transform2D.h" />
+    <ClInclude Include="World\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,11 +25,11 @@
     <Filter Include="소스 파일\util">
       <UniqueIdentifier>{a32f6cef-3a64-45a3-a946-f38d874ae467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\World">
+      <UniqueIdentifier>{83dc0618-8e88-4ef0-9205-1230c3c80437}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main2.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Application.cpp">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
@@ -97,6 +97,21 @@
     </ClInclude>
     <ClInclude Include="Core\ResourceManager.h">
       <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="World\Component.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
+    <ClInclude Include="World\GameObject.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
+    <ClInclude Include="World\SpriteRendererComponent.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
+    <ClInclude Include="World\Transform2D.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
+    <ClInclude Include="World\World.h">
+      <Filter>소스 파일\World</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

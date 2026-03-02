@@ -39,6 +39,8 @@ class DrawQueue {
 public:
     void Clear() { m_cmds.clear(); }
 
+    void AddCommand(DrawCommand cmd) { m_cmds.push_back(std::move(cmd)); }
+
     void AddRectOutline(const SDL_FRect& r, Color c, int z = 0) {
         DrawCommand cmd;
         cmd.type = DrawType::RectOutline;

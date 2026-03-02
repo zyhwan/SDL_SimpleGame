@@ -24,7 +24,7 @@ bool Application::Init()
 	// SDL에서 SDL_Window*는 "창 핸들(handle)" 같은 존재.
 	// 창을 만들면 OS 자원을 잡기 때문에,
 	// 마지막에 반드시 SDL_DestroyWindow()로 해제해야 함.
-	m_window = SDL_CreateWindow("My SDL3 Game", 1024, 768, 0);
+	m_window = SDL_CreateWindow("My SDL3 Game", 531, 700, 0);
 	if (!m_window)
 	{
 		return false;
@@ -83,6 +83,7 @@ void Application::Run() { //게임 루프
     DrawQueue q; // 매 프레임 재사용(스택에 두고 Clear로 비움)
 
     while (m_running) { //루프가 한번 돌때가 (1 Frame)
+        // ---- 이벤트 처리 ----
         m_Input.BeginFrame();
         PumpEvents();
         m_Time.Tick();

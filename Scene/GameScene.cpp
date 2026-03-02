@@ -14,57 +14,77 @@ GameScene::~GameScene()
 void GameScene::OnEnter(Application& app)
 {
     m_Tex = app.Resource().LoadTexture("Resource/bmp_Sample.bmp");
+
+    // 오브젝트 생성 (예약 world의 update에서 오브젝트 등록함. 씬이 켜질때 생성할 오브젝트들을 미리 등록하는 것.)
+    GameObject& obj = m_world.Spawn();
+    m_player = &obj;
+
+    // Transform 초기값
+    m_player->transform.position = { 0.0f, 0.0f };
+    m_player->transform.z = 0;
+
+    // 스프라이트 렌더러 컴포넌트 부착
+    auto& sprite = m_player->AddComponent<SpriteRendererComponent>(m_Tex);
+
+    // 스프라이트 크기 지정(없으면 기본값)
+    sprite.SetSize(64.f, 64.f);
+
+    // (선택) 원점/회전 쓰면
+    sprite.SetOrigin(32.f, 32.f);
+
 }
 
 void GameScene::OnExit(Application& app)
 {
+    m_world.Clear();
+    m_player = nullptr;
     m_Tex.reset();
 }
 
 void GameScene::HandleEvent(Application& app, const SDL_Event& e)
 {
-	(void)app; (void)e;
-	// 이벤트는 Input이 처리하므로 여기선 비워도 됨
-
-}
-
-void GameScene::Update(Application& app, float dt)
-{
+    // 여기서는 "즉발 이벤트"만 처리 예시
+    // 이동은 Update에서 키 상태로 처리하는 편이 일반적
+    if (app.GetInput().WasPressed(SDLK_RETURN))
+    {
+        app.SetScene(std::make_unique<TitleScene>()); //타이틀 씬으로 전환
+    }
     // ESC: 종료
     if (app.GetInput().WasPressed(SDLK_ESCAPE)) {
         app.quit();
         return;
     }
+}
 
-    if (app.GetInput().WasPressed(SDLK_RETURN)) {
-        app.SetScene(std::make_unique<TitleScene>());
-        return;
-    }
+void GameScene::Update(Application& app, float dt)
+{
 
     // WASD 이동 (누르고 있는 동안)
-    float dx = 0.0f, dy = 0.0f;
-    if (app.GetInput().IsDown(SDLK_A)) dx -= 1.0f;
-    if (app.GetInput().IsDown(SDLK_D)) dx += 1.0f;
-    if (app.GetInput().IsDown(SDLK_W)) dy -= 1.0f;
-    if (app.GetInput().IsDown(SDLK_S)) dy += 1.0f;
+    if (m_player)
+    {
+        auto& p = m_player->transform.position;
 
-    // 대각선 속도 증가 방지(정규화) - 간단 버전
-    if (dx != 0.0f && dy != 0.0f) {
-        dx *= 0.7071067f; // 1/sqrt(2)
-        dy *= 0.7071067f;
+        if (app.GetInput().IsDown(SDLK_A) || app.GetInput().IsDown(SDLK_LEFT)) p.x -= m_speed * dt;
+        if (app.GetInput().IsDown(SDLK_D) || app.GetInput().IsDown(SDLK_RIGHT)) p.x += m_speed * dt;
+        if (app.GetInput().IsDown(SDLK_S) || app.GetInput().IsDown(SDLK_DOWN)) p.y += m_speed * dt;
+        if (app.GetInput().IsDown(SDLK_W) || app.GetInput().IsDown(SDLK_UP)) p.y -= m_speed * dt;
     }
 
-	m_x += dx * m_speed * dt;
-	m_y += dy * m_speed * dt;
+    //스페이스를 "이번 프레임에 눌렀을 때만" 처리
+    if (app.GetInput().WasPressed(SDLK_SPACE)) {
+        // 점프/발사/상호작용 등 1회 트리거
+    }
+
+    //즉, World.Update는 단순 로직 업데이트가 아니라 오브젝트 등록 / 삭제 커밋까지 포함하는 "월드 틱"임.
+    m_world.Update(dt);
+
 }
 
 void GameScene::Render(Application& app, DrawQueue& q)
 {
-	SDL_FRect r{ m_x, m_y, 80.0f, 80.0f };
+    // 월드는 DrawQueue에 커맨드만 적재
+    m_world.Render(q);
 
-    //드로우 큐에 렌더를 쌓아두기
-    q.AddRectFilled(r, { 0,200,255,255 }, 5); //기본 사각형 생성
+    q.AddRectFilled({ 10,10,100,100 }, { 255,0,0,255 }, 999);
 
-    SDL_FRect dst{ 300, 0, 531.6, 700 };
-    q.AddTexture(m_Tex, dst, 4); //샘플 텍스쳐 생성
 }
