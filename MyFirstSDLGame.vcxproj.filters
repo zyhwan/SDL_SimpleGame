@@ -122,5 +122,8 @@
     <ClInclude Include="Core\InputMap.h">
       <Filter>소스 파일\Core</Filter>
     </ClInclude>
+    <ClInclude Include="World\SpriteSheet.h">
+      <Filter>소스 파일\World</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -170,6 +170,7 @@
     <ClInclude Include="World\Component.h" />
     <ClInclude Include="World\GameObject.h" />
     <ClInclude Include="World\SpriteRendererComponent.h" />
+    <ClInclude Include="World\SpriteSheet.h" />
     <ClInclude Include="World\Transform2D.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
