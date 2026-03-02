@@ -13,6 +13,24 @@ GameScene::~GameScene()
 
 void GameScene::OnEnter(Application& app)
 {
+
+    //----사용자 지정 키보드 설정----
+    // 이동 축
+    //m_bind.BindAxis("MoveX", { SDLK_A, SDLK_LEFT }, { SDLK_D, SDLK_RIGHT });
+    //m_bind.BindAxis("MoveY", { SDLK_W, SDLK_UP }, { SDLK_S, SDLK_DOWN });
+
+    //// 액션
+    //m_bind.BindAction("Jump", { SDLK_SPACE, SDLK_W, SDLK_UP });
+    //m_bind.BindAction("Fire", { SDLK_J, SDLK_Z });
+    //m_bind.BindAction("Grenade", { SDLK_K, SDLK_X });
+    //m_bind.BindAction("Pause", { SDLK_ESCAPE });
+
+    //// 슬로모/테스트
+    //m_bind.BindAction("SlowMo", { SDLK_F1 });
+    //m_bind.BindAction("Pause0", { SDLK_F2 });
+    //m_bind.BindAction("Resume", { SDLK_F3 });
+
+    //---- 씬 내부 오브젝트 초기화----
     SDL_FPoint win = app.GetWindowSizeF();
 
     m_Tex = app.Resource().LoadTexture("Resource/bmp_Sample.bmp");
@@ -31,8 +49,6 @@ void GameScene::OnEnter(Application& app)
     // 스프라이트 크기 지정(없으면 기본값)
     sprite.SetSize(64.f, 64.f);
 
-    // (선택) 원점/회전 쓰면
-    //sprite.SetOrigin(32.f, 32.f);
 }
 
 void GameScene::OnExit(Application& app)

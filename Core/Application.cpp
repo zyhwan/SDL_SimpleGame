@@ -111,12 +111,16 @@ void Application::Run() { //게임 루프
         const float dt = m_Time.DeltaSeconds();
 
         if (m_scene) {
-            m_scene->Update(*this, dt); 
+            // Update() 안에서 timeScale을 바꾸거나(예: pause), 씬 전환 예약(SetScene) 같은 걸 
+            // 한 뒤에 UpdateUI가 같은 프레임에 또 입력을 처리하면서 상태가 꼬일 수 있음.
             m_scene->UpdateUI(*this, udt);  // UI는 멈추지 않음
+            m_scene->Update(*this, dt); 
         }
 
         // ---- Render ----
         if (m_renderer) {
+            q.Clear(); //렌더링 시작전에 무조건 드로우큐를 비우고 시작.
+
             m_renderer2D.BackGroundColor({ 0,0,0,255 }); // 배경 지우기(검정)
             if (m_scene) m_scene->Render(*this, q);
 

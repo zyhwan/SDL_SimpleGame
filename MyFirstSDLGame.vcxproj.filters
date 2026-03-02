@@ -66,6 +66,9 @@
     <ClCompile Include="Core\ResourceManager.cpp">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\InputMap.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Application.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="World\Camera2D.h">
       <Filter>소스 파일\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\InputMap.h">
+      <Filter>소스 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

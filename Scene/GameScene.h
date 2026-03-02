@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "../World/World.h" // 경로는 프로젝트 구조에 맞게 조정
 #include "../World/SpriteRendererComponent.h"
+#include "../Core/InputMap.h"
+
 
 class GameScene : public Scene {
 public:
@@ -23,6 +25,9 @@ private:
     float m_speed = 500.0f; // px/s
 
     TextureHandle m_Tex;
+
+    //키보드 입력 세팅
+    InputMap m_bind;
 
     //UI 상태 변수 추가
     float m_uiBlink = 0.f;
