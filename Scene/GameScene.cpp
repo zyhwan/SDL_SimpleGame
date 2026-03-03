@@ -33,7 +33,7 @@ void GameScene::OnEnter(Application& app)
     //---- 씬 내부 오브젝트 초기화----
     SDL_FPoint win = app.GetWindowSizeF();
 
-    m_Tex = app.Resource().LoadTexture("Resource/bmp_Sample.bmp");
+    m_Tex = app.Resource().LoadTexture("Resource/kirby.png");
 
     // 오브젝트 생성 (예약 world의 update에서 오브젝트 등록함. 씬이 켜질때 생성할 오브젝트들을 미리 등록하는 것.)
     GameObject& obj = m_world.Spawn();
@@ -88,7 +88,7 @@ void GameScene::Update(Application& app, float dt)
         // 카메라 follow (dt=0이면 위치 변화 없음)
         SDL_FPoint win = app.GetWindowSizeF();
         SDL_FPoint pp = m_player->transform.position;
-        m_world.SetCameraPosition(pp.x - win.x * 0.5f, pp.y - win.y * 0.5f);
+        m_world.SetCameraPosition(pp.x - win.x * 0.4f, pp.y - win.y * 0.4f);
     }
 
     //스페이스를 "이번 프레임에 눌렀을 때만" 처리
