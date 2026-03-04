@@ -21,6 +21,7 @@ public:
 private:
     World m_world;
     GameObject* m_player = nullptr;  // 월드가 소유, 씬은 포인터만 보관
+    std::vector<std::unique_ptr<GameObject>> m_Object;
 
     float m_speed = 500.0f; // px/s
 

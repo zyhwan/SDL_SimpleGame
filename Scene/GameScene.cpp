@@ -16,19 +16,19 @@ void GameScene::OnEnter(Application& app)
 
     //----사용자 지정 키보드 설정----
     // 이동 축
-    //m_bind.BindAxis("MoveX", { SDLK_A, SDLK_LEFT }, { SDLK_D, SDLK_RIGHT });
-    //m_bind.BindAxis("MoveY", { SDLK_W, SDLK_UP }, { SDLK_S, SDLK_DOWN });
+    m_bind.BindAxis("MoveX", { SDLK_A, SDLK_LEFT }, { SDLK_D, SDLK_RIGHT });
+    m_bind.BindAxis("MoveY", { SDLK_W, SDLK_UP }, { SDLK_S, SDLK_DOWN });
 
-    //// 액션
-    //m_bind.BindAction("Jump", { SDLK_SPACE, SDLK_W, SDLK_UP });
-    //m_bind.BindAction("Fire", { SDLK_J, SDLK_Z });
-    //m_bind.BindAction("Grenade", { SDLK_K, SDLK_X });
-    //m_bind.BindAction("Pause", { SDLK_ESCAPE });
+    // 액션
+    m_bind.BindAction("Jump", { SDLK_SPACE, SDLK_W, SDLK_UP });
+    m_bind.BindAction("Fire", { SDLK_J, SDLK_Z });
+    m_bind.BindAction("Grenade", { SDLK_K, SDLK_X });
+    m_bind.BindAction("Pause", { SDLK_ESCAPE });
 
-    //// 슬로모/테스트
-    //m_bind.BindAction("SlowMo", { SDLK_F1 });
-    //m_bind.BindAction("Pause0", { SDLK_F2 });
-    //m_bind.BindAction("Resume", { SDLK_F3 });
+    // 슬로모/테스트
+    m_bind.BindAction("SlowMo", { SDLK_F1 });
+    m_bind.BindAction("Pause0", { SDLK_F2 });
+    m_bind.BindAction("Resume", { SDLK_F3 });
 
     m_world.SetCameraPosition(0.f, 0.f);
 
@@ -38,8 +38,14 @@ void GameScene::OnEnter(Application& app)
     m_Tex = app.Resource().LoadTexture("Resource/kirby.png");
 
     // 오브젝트 생성 (예약 world의 update에서 오브젝트 등록함. 씬이 켜질때 생성할 오브젝트들을 미리 등록하는 것.)
-    GameObject& obj = m_world.Spawn();
-    m_player = &obj;
+    GameObject& player = m_world.Spawn();
+    m_player = &player;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        m_Object.push_back(m_world.Spawn());
+    }
+
 
     // Transform 초기값
     m_player->transform.position = { win.x * 0.5f, win.y * 0.5f }; //화면의 중앙 값
@@ -80,20 +86,17 @@ void GameScene::Update(Application& app, float dt)
     // WASD 이동 (누르고 있는 동안)
     if (m_player)
     {
-        auto& p = m_player->transform.position;
+        Input& input = app.GetInput();
 
-        if (app.GetInput().IsDown(SDLK_A) || app.GetInput().IsDown(SDLK_LEFT)) p.x -= m_speed * dt;
-        if (app.GetInput().IsDown(SDLK_D) || app.GetInput().IsDown(SDLK_RIGHT)) p.x += m_speed * dt;
-        if (app.GetInput().IsDown(SDLK_S) || app.GetInput().IsDown(SDLK_DOWN)) p.y += m_speed * dt;
-        if (app.GetInput().IsDown(SDLK_W) || app.GetInput().IsDown(SDLK_UP)) p.y -= m_speed * dt;
+        // 시뮬 dt는 scaled
+        const float mx = m_bind.Axis(input, "MoveX");
+        const float my = m_bind.Axis(input, "MoveY");
+
+        m_player->transform.position.x += mx * m_speed * dt;
+        m_player->transform.position.y += my * m_speed * dt;
 
 
         m_world.SetCameraPos(app.GetWindowSizeF(), m_player->transform.position);
-    }
-
-    //스페이스를 "이번 프레임에 눌렀을 때만" 처리
-    if (app.GetInput().WasPressed(SDLK_SPACE)) {
-        // 점프/발사/상호작용 등 1회 트리거
     }
 
     //즉, World.Update는 단순 로직 업데이트가 아니라 오브젝트 등록 / 삭제 커밋까지 포함하는 "월드 틱"임.
