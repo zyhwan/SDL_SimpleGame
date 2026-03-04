@@ -53,6 +53,14 @@ public:
     const Camera2D& Camera() const { return m_camera; }
 
     void SetCameraPosition(float x, float y) { m_camera.position = { x, y }; }
+
+    void SetCameraPos(SDL_FPoint WinScreen, SDL_FPoint PlayerPos)
+    {  
+        // 카메라 follow (dt=0이면 위치 변화 없음)
+        SDL_FPoint win = WinScreen;
+        SDL_FPoint pp = PlayerPos;
+        this->SetCameraPosition(pp.x - win.x * 0.4f, pp.y - win.y * 0.4f);
+    }
     SDL_FPoint GetCameraPosition() const { return m_camera.position; }
 
     Camera2D m_camera{}; //카메라 관리

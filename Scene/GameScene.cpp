@@ -30,6 +30,8 @@ void GameScene::OnEnter(Application& app)
     //m_bind.BindAction("Pause0", { SDLK_F2 });
     //m_bind.BindAction("Resume", { SDLK_F3 });
 
+    m_world.SetCameraPosition(0.f, 0.f);
+
     //---- 씬 내부 오브젝트 초기화----
     SDL_FPoint win = app.GetWindowSizeF();
 
@@ -85,10 +87,8 @@ void GameScene::Update(Application& app, float dt)
         if (app.GetInput().IsDown(SDLK_S) || app.GetInput().IsDown(SDLK_DOWN)) p.y += m_speed * dt;
         if (app.GetInput().IsDown(SDLK_W) || app.GetInput().IsDown(SDLK_UP)) p.y -= m_speed * dt;
 
-        // 카메라 follow (dt=0이면 위치 변화 없음)
-        SDL_FPoint win = app.GetWindowSizeF();
-        SDL_FPoint pp = m_player->transform.position;
-        m_world.SetCameraPosition(pp.x - win.x * 0.4f, pp.y - win.y * 0.4f);
+
+        m_world.SetCameraPos(app.GetWindowSizeF(), m_player->transform.position);
     }
 
     //스페이스를 "이번 프레임에 눌렀을 때만" 처리
